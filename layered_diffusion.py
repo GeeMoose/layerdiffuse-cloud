@@ -211,9 +211,11 @@ class LayeredDiffusionBase:
         return (work_model,)
 
 
+# extract the froeground
 class LayeredDiffusionFG:
     """Generate foreground with transparent background."""
 
+    # 有两个机制，一个Attention,一个Convolution
     @classmethod
     def INPUT_TYPES(s):
         return {
