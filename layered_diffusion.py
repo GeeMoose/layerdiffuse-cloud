@@ -399,20 +399,3 @@ class LayeredDiffusionDiff:
         return ld.apply_layered_diffusion(model, weight) + ld.apply_c_concat(
             cond, uncond, c_concat
         )
-
-
-NODE_CLASS_MAPPINGS = {
-    "LayeredDiffusionApply": LayeredDiffusionFG,
-    "LayeredDiffusionCondApply": LayeredDiffusionCond,
-    "LayeredDiffusionDiffApply": LayeredDiffusionDiff,
-    "LayeredDiffusionDecode": LayeredDiffusionDecode,
-    "LayeredDiffusionDecodeRGBA": LayeredDiffusionDecodeRGBA,
-}
-
-NODE_DISPLAY_NAME_MAPPINGS = {
-    "LayeredDiffusionApply": "Layer Diffuse Apply",
-    "LayeredDiffusionCondApply": "Layer Diffuse Cond Apply",
-    "LayeredDiffusionDiffApply": "Layer Diffuse Diff Apply",
-    "LayeredDiffusionDecode": "Layer Diffuse Decode",
-    "LayeredDiffusionDecodeRGBA": "Layer Diffuse Decode (RGBA)",
-}
