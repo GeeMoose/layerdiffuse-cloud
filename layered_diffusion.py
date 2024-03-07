@@ -165,8 +165,9 @@ class LayeredDiffusionDecodeRGBA(LayeredDiffusionDecode):
 
 
 class LayerMethod(Enum):
+    # ATTN是目前的优解
     ATTN = "Attention Injection"
-    CONV = "Conv Injection"
+    # CONV = "Conv Injection"
 
 
 class LayerType(Enum):
@@ -212,11 +213,12 @@ class LayeredDiffusionBase:
         return (work_model,)
 
 
-# extract the froeground
+# extract the froeground in only attn mechanism
 class LayeredDiffusionFG:
     """Generate foreground with transparent background."""
 
     # 有两个机制，一个Attention,一个Convolution
+    # 我们这里使用Attention的Rank-256 LORA
     @classmethod
     def INPUT_TYPES(s):
         return {
@@ -225,7 +227,7 @@ class LayeredDiffusionFG:
                 "method": (
                     [
                         LayerMethod.ATTN.value,
-                        LayerMethod.CONV.value,
+                        # LayerMethod.CONV.value,
                     ],
                     {
                         "default": LayerMethod.ATTN.value,
@@ -247,10 +249,10 @@ class LayeredDiffusionFG:
             model_file_name="layer_xl_transparent_attn.safetensors",
             model_url="https://huggingface.co/LayerDiffusion/layerdiffusion-v1/resolve/main/layer_xl_transparent_attn.safetensors",
         )
-        self.fg_conv = LayeredDiffusionBase(
-            model_file_name="layer_xl_transparent_conv.safetensors",
-            model_url="https://huggingface.co/LayerDiffusion/layerdiffusion-v1/resolve/main/layer_xl_transparent_conv.safetensors",
-        )
+        # self.fg_conv = LayeredDiffusionBase(
+        #     model_file_name="layer_xl_transparent_conv.safetensors",
+        #     model_url="https://huggingface.co/LayerDiffusion/layerdiffusion-v1/resolve/main/layer_xl_transparent_conv.safetensors",
+        # )
 
     def apply_layered_diffusion(
         self,
@@ -261,8 +263,8 @@ class LayeredDiffusionFG:
         method = LayerMethod(method)
         if method == LayerMethod.ATTN:
             return self.fg_attn.apply_layered_diffusion(model, weight)
-        if method == LayerMethod.CONV:
-            return self.fg_conv.apply_layered_diffusion(model, weight)
+        # if method == LayerMethod.CONV:
+        #     return self.fg_conv.apply_layered_diffusion(model, weight)
 
 
 class LayeredDiffusionCond:
